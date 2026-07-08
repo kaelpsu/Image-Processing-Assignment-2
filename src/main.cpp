@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
                 }
             }
 
-            Block8x8 dequantizedBlock = processor.applyInverseQuantization(quantizedBlock);
+            Block8x8 dequantizedBlock = processor.applyInverseQuantization(quantizedBlock, compressionFactor);
             Block8x8 reconstructedBlock = processor.applyInverseDCT(dequantizedBlock);
 
             // copia o bloco reconstruído para bloco da imagem final, convertendo de double para uchar (0-255)

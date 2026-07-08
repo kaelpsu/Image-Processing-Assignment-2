@@ -71,12 +71,19 @@ Block8x8 SpatialTransformation::applyQuantization(const Block8x8& dctBlock, floa
     return quantizedBlock;
 }
 
-Block8x8 SpatialTransformation::applyInverseQuantization(const Block8x8& quantizedBlock) {
+Block8x8 SpatialTransformation::applyInverseQuantization(const Block8x8& quantizedBlock, float compressionFactor) {
     Block8x8 dequantizedBlock(8, std::vector<double>(8, 0.0));
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            dequantizedBlock[i][j] = quantizedBlock[i][j] * quantizationMatrix[i][j];
+
+            double adjustedQuantizationValue = quantizationMatrix[i][j] * compressionFactor;
+            
+            if (adjustedQuantizationValue < 1.0) {
+                adjustedQuantizationValue = 1.0; 
+            }
+            
+            dequantizedBlock[i][j] = quantizedBlock[i][j] * adjustedQuantizationValue;
         }
     }
 

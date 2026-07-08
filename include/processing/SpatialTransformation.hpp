@@ -16,6 +16,6 @@ public:
     SpatialTransformation();
     Block8x8 applyDCT(const Block8x8& pixelBlock);
     Block8x8 applyQuantization(const Block8x8& dctBlock, float compressionFactor);
-    Block8x8 applyInverseQuantization(const Block8x8& quantizedBlock);
+    Block8x8 applyInverseQuantization(const Block8x8& quantizedBlock, float compressionFactor);
     Block8x8 applyInverseDCT(const Block8x8& dctBlock);
 };

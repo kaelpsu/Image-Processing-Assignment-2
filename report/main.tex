@@ -80,7 +80,7 @@ Each DCT coefficient is divided by its corresponding step and rounded:
 \begin{equation}
 F_q(u,v) = \operatorname{round}\!\left[\frac{F(u,v)}{Q'(i,j)}\right].
 \end{equation}
-Larger values of $f$ enlarge the quantization steps, driving more coefficients, especially the high-frequency ones, to zero. This is what produces compression, the fraction of nonzero coefficients that remain after this step directly determines the achievable compression rate. Smaller values of $f$ preserve more coefficients and approach lossless reconstruction.
+Larger values of $f$ enlarge the quantization steps, driving more coefficients, especially the high-frequency ones, to zero. This is what produces compression, the fraction of nonzero coefficients that remain after this step directly determines the achievable compression rate. Smaller values of $f$ preserve more coefficients and produce reconstructed images that more closely resemble the original.
 
 \subsection{Reconstruction}
 
@@ -110,7 +110,7 @@ The program was used to compress a sample grayscale test image using four compre
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\linewidth]{../data/input/Lenna_gray.jpg}
+    \includegraphics[width=0.8\linewidth]{../data/input/Lenna_gray.jpg}
     \caption{Original grayscale input image.}
     \label{fig:placeholder}
 \end{figure}
@@ -162,13 +162,13 @@ The program was used to compress a sample grayscale test image using four compre
 \end{tabular}
 \end{center}
 
-The results confirm the expected quality/compression trade-off, however, they reveal to have a far from linear compression rate and data loss. At factor 1.0, reconstruction is essentially lossless, since the quantization steps are close to the base JPEG matrix and almost every DCT coefficient survives, intuitively, this is also the setting with the lowest compression ratio ($9.15\times$). Raising the factor to 2.0 causes a disproportionate quality collapse, PSNR drops by over 34~dB ($68.285 \rightarrow 34.201$~dB), for a comparatively modest gain in compression ratio ($9.15\times \rightarrow 12.27\times$). Beyond that point the trade-off becomes much more favorable: going from factor 2.0 to 8.0 nearly triples the compression ratio ($12.27\times \rightarrow 35.36\times$) while PSNR falls by only about 5.5~dB ($34.201 \rightarrow 28.658$~dB), with MSE increasing more gradually ($24.71 \rightarrow 88.56$) than in the initial jump.
+The results confirm the expected quality/compression trade-off, however, they reveal to have a non-linear compression rate and data loss. At factor 1.0, reconstruction results highly resemble the original image, since the quantization steps are close to the base JPEG matrix and almost every DCT coefficient survives. Intuitively, this is also the setting with the lowest compression ratio ($9.15\times$). Raising the factor to 2.0 causes a disproportionate drop in quality, as PSNR drops by over 34~dB ($68.285 \rightarrow 34.201$~dB), for a comparatively small gain in compression ratio ($9.15\times \rightarrow 12.27\times$). Beyond that point the trade-off becomes more favorable: going from factor 2.0 to 8.0 nearly triples the compression ratio ($12.27\times \rightarrow 35.36\times$) while PSNR falls by only about 5.5~dB ($34.201 \rightarrow 28.658$~dB), with MSE increasing more gradually ($24.71 \rightarrow 88.56$) than in the initial jump.
  
-This pattern indicates that most of the perceptible quality loss is concentrated in the transition away from near-lossless quantization, since that is when a large share of the mid- and high-frequency coefficients first start being rounded to zero. Once the image is already in a lossy regime (factor $\geq 2.0$), further increases to the compression factor mainly remove coefficients that were already contributing little energy, so additional compression is comparatively cheap in terms of PSNR. Visually, this is consistent with sharp detail and edges being preserved at factor 1.0, while $8\times8$ blocking artifacts and loss of fine texture become increasingly visible from factor 2.0 onward, most noticeably at factor 8.0. 
+This pattern indicates that most of the perceptible quality loss occurs when moving from low to moderate compression, as many mid- and high-frequency coefficients are first rounded to zero. After that, increasing the compression factor mainly removes coefficients with less significant information, resulting in smaller PSNR reductions. Visually, this is consistent with sharp detail and edges being preserved at factor 1.0, while $8\times8$ blocking artifacts and loss of fine texture become increasingly visible from factor 2.0 onward, most noticeably at factor 8.0. 
 
-The quantitative results clearly corroborate with our visual observations, the image 'a' (compression rate = 1) is almost equal to the original image, and, as the compression factor increases, the image quality decays significantly.
+The quantitative results clearly corroborate with our visual observations, since the image 'a' (compression rate = 1) is almost equal to the original image, and, as the compression factor increases, the image quality decays significantly.
 
 \section{Conclusion}
-The experiments confirm the fundamental trade-off inherent to DCT-based lossy compression: increasing the compression factor increases the achievable compression ratio at the cost of reconstruction fidelity, but the two do not scale together at a constant rate. The quantitative results suggests that, for this image, a factor around 2.0 already sits near the ``knee'' of the compression ratio, capturing most of the compression benefit still available before diminishing returns set in, while pushing further to factor 8.0 is only worthwhile when a much higher compression ratio is required and the accompanying blocking artifacts and loss of fine detail are acceptable.
+The experiments confirm the fundamental trade-off inherent to DCT-based lossy compression: increasing the compression factor increases the achievable compression ratio at the cost of reconstruction fidelity, but the two do not scale together at a constant rate. The quantitative results suggests that, for this image, a factor around 2.0 already achieves most of the compression gain before the improvements in compression rate become less significant. Because of that, pushing further to factor 8.0 is only worthwhile when a much higher compression ratio is required and the accompanying blocking artifacts and loss of fine detail are acceptable.
 
 \end{document}
